@@ -58,7 +58,6 @@ class _SideHeaderListViewState extends State<SideHeaderListView> {
   }
 
   void _reposition() {
-    print('new position = ${(_controller.offset / widget.itemExtent).floor()}');
     setState(() =>
         currentPosition = (_controller.offset / widget.itemExtent).floor());
   }
