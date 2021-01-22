@@ -53,7 +53,7 @@ class _SideHeaderListViewState extends State<SideHeaderListView> {
 
   @override
   void dispose() {
-    _controller?.removeListener(_reposition);
+    _controller.removeListener(_reposition);
     super.dispose();
   }
 
