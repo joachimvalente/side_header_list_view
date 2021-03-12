@@ -20,6 +20,7 @@ class SideHeaderListView extends StatefulWidget {
   final EdgeInsets padding;
   final HasSameHeader hasSameHeader;
   final double itemExtent;
+  final ScrollController controller;
 
   SideHeaderListView({
     Key key,
@@ -28,6 +29,7 @@ class SideHeaderListView extends StatefulWidget {
     @required this.headerBuilder,
     @required this.itemBuilder,
     @required this.hasSameHeader,
+    @required this.controller,
     this.padding,
   }) : super(key: key);
 
@@ -37,13 +39,12 @@ class SideHeaderListView extends StatefulWidget {
 
 class _SideHeaderListViewState extends State<SideHeaderListView> {
   int currentPosition = 0;
-  final _controller = ScrollController();
 
   @override
   void initState() {
     super.initState();
     // Reposition side view each time the main list view is scrolled
-    _controller.addListener(_reposition);
+    widget.controller.addListener(_reposition);
     // In case the initial offset is not 0, we reposition the side view to the
     // correct offset after first build
     // TODO: this produces a flickering effect -- we should try to position it
@@ -53,13 +54,13 @@ class _SideHeaderListViewState extends State<SideHeaderListView> {
 
   @override
   void dispose() {
-    _controller.removeListener(_reposition);
+    widget.controller.removeListener(_reposition);
     super.dispose();
   }
 
   void _reposition() {
-    setState(() =>
-        currentPosition = (_controller.offset / widget.itemExtent).floor());
+    setState(() => currentPosition =
+        (widget.controller.offset / widget.itemExtent).floor());
   }
 
   @override
@@ -78,7 +79,7 @@ class _SideHeaderListViewState extends State<SideHeaderListView> {
             padding: widget.padding,
             itemCount: widget.itemCount,
             itemExtent: widget.itemExtent,
-            controller: _controller,
+            controller: widget.controller,
             itemBuilder: (BuildContext context, int index) => Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
